@@ -1,1 +1,1 @@
-# Tests
+# Configuration folder
