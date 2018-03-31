@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package HttpHandlers
+package HttpServices
 
 import (
 	"net/http"
@@ -25,7 +25,7 @@ import (
 	"strconv"
 )
 
-// implement thumnail service handler
+// implements thumnail service handler
 
 
 // thumbnail service parameters
@@ -33,10 +33,19 @@ type thumbnailParameters struct {
 	width int
 	height int
 	url string
+	tumbnailTmpPath string
+	tmpPath string
+	sessionId int
+}
+
+// registration function
+func registerThumbnail(config *CommonServiceConfig) error {
+	http.HandleFunc(config.Path, thumbnailHandler)
+	return nil
 }
 
 // extract parameters from URL
-func extractThumbnailParams(values url.Values) (*thumbnailParameters, error){
+func fillThumbnailParams(values url.Values) (*thumbnailParameters, error){
 	var err error
 
 	params := thumbnailParameters{}
@@ -78,23 +87,47 @@ func extractThumbnailParams(values url.Values) (*thumbnailParameters, error){
 		return nil, errors.New("height Not valid")
 	}
 
+	//load needed params from handler's service
+	params.sessionId = gServiceManager.getSessionId()
+	params.tmpPath = gServiceManager.config.TempPath
+
+	// create file information
+	fileName, err := extractFileNameFromUrl(params.url)
+	if err != nil {
+		return nil, err
+	}
+
+	params.tumbnailTmpPath = params.tmpPath + "/" + strconv.Itoa(params.sessionId) + fileName
+
 	return &params, nil
+}
+
+func thumbnailImageResize(params *thumbnailParameters) error{
+	return nil
 }
 
 // thumbnail service handler
 func thumbnailHandler(w http.ResponseWriter, r *http.Request) {
-	_, err :=extractThumbnailParams(r.URL.Query())
+	params, err :=fillThumbnailParams(r.URL.Query())
 
 	if err != nil {
 		http.Error(w, errorStringToJson(err.Error()), http.StatusMethodNotAllowed)
 		return
 	}
 
-	// TBD upload image
+	// download image
+	if err := downloadFile(params.url, params.tumbnailTmpPath); err != nil {
+		http.Error(w, errorStringToJson(err.Error()), http.StatusNotFound)
+		return
+	}
 
 	// TBD resize image
+	if err := thumbnailImageResize(params); err != nil {
+		http.Error(w, errorStringToJson(err.Error()), http.StatusInternalServerError)
+		return
+	}
 
-	// TBD return image to browser
+	// TBD upload image to browser
 
 	fmt.Fprintf(w, "TEST OK")
 }

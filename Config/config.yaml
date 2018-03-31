@@ -1,4 +1,5 @@
 port: "8080"
-path: "/thumbnail"
-logfile: "/home/moshe/go/projects/src/github.com/moshetbl/go/log.txt"
-loglevel: "Debug"
+tmppath: "/tmp"
+services:
+  thumbnail:
+    path: "/thumbnail"

@@ -17,14 +17,11 @@ limitations under the License.
 package main
 
 import (
-	"github.com/moshetbl/go/Common"
-	"github.com/moshetbl/go/HttpHandlers"
 	"log"
 	"os"
 	"errors"
+	"github.com/moshetbl/go/HttpServices"
 )
-
-var configFile = "/home/moshe/go/projects/src/github.com/moshetbl/go/Config/config.yaml"
 
 func getConfigFile() (string, error) {
 
@@ -53,13 +50,5 @@ func main(){
 		return
 	}
 
-	// load configuration file:
-	conf, err := Common.LoadConfiguration(path)
-
-	if err != nil{
-		log.Printf("Failed to load configuration file:%s", configFile)
-	}
-
-	// start service
-	HttpHandlers.LoadHandlersService(conf)
+	HttpServices.Init(path)
 }

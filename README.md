@@ -1,7 +1,7 @@
 # Cloudinary Assignment
 Introduction
 ------------
-coded by Moshe Tubul
+coded by Moshe Tubul 2018
 
 Compatibility
 -------------
@@ -17,6 +17,10 @@ To download project run:
 
     go get github.com/go-yaml/yaml
     go get github.com/moshetbl/go
+
+Tests
+-------------
+TBD
     
 Deployment:
 -------------
