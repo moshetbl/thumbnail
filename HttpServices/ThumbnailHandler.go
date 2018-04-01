@@ -23,6 +23,9 @@ import (
 	"log"
 	"errors"
 	"strconv"
+	"image"
+	"github.com/disintegration/imaging"
+	"image/color"
 )
 
 // implements thumnail service handler
@@ -37,7 +40,6 @@ type thumbnailParameters struct {
 	tmpPath string
 	sessionId int
 }
-
 // registration function
 func registerThumbnail(config *CommonServiceConfig) error {
 	http.HandleFunc(config.Path, thumbnailHandler)
@@ -103,6 +105,57 @@ func fillThumbnailParams(values url.Values) (*thumbnailParameters, error){
 }
 
 func thumbnailImageResize(params *thumbnailParameters) error{
+	// decode image
+	srcImg, err := imaging.Open(params.tumbnailTmpPath)
+	if err != nil {
+		log.Println("Decode Error file: ", params.tumbnailTmpPath)
+		return errors.New("Decode Error file: " + params.tumbnailTmpPath)
+	}
+
+	// calculate size of original image
+	b:= srcImg.Bounds()
+	origHeight := b.Max.Y
+	origWidth := b.Max.X
+	origRatio := float64(origWidth) / float64(origHeight)
+	dstRatio := float64(params.width) / float64(params.height)
+	var dstWidth, dstHeight int
+
+	// in case aspect ratio is the same
+	if int(origRatio * 3.0) == int(dstRatio * 3.0) {
+		if origWidth < params.width {
+			dstHeight = origHeight
+			dstWidth = origWidth
+		} else {
+			dstHeight = params.height
+			dstWidth = params.width
+		}
+	} else { // aspect ratio is different
+		// pad left/right
+		if dstRatio > origRatio {
+			dstHeight = params.height
+			dstWidth = int(float64(params.height) * origRatio)
+
+		} else {
+			// pad top/bottom
+			dstWidth = params.width
+			dstHeight = int(float64(params.width) / origRatio)
+		}
+	}
+
+	// create background black image
+	dstFinalImg := imaging.New(params.width, params.height, color.NRGBA{0, 0, 0, 0})
+	resizedImg := imaging.Resize(srcImg, dstWidth, dstHeight, imaging.Lanczos)
+
+	// merge images
+	dstFinalImg = imaging.Paste(dstFinalImg, resizedImg, image.Pt((params.width - dstWidth)/2 , (params.height - dstHeight)/2))
+
+	// save image back to file
+	err = imaging.Save(dstFinalImg, params.tumbnailTmpPath)
+	if err != nil {
+		log.Fatalf("Failed to save image: %v", err)
+		return err
+	}
+
 	return nil
 }
 
@@ -121,7 +174,7 @@ func thumbnailHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TBD resize image
+	// resize image
 	if err := thumbnailImageResize(params); err != nil {
 		http.Error(w, errorStringToJson(err.Error()), http.StatusInternalServerError)
 		return

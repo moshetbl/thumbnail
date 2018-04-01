@@ -77,6 +77,8 @@ func (p *serviceManager) Init(filePath string) error {
 		return err
 	}
 
+	registerImageFormats() // register supported image formats for services
+
 	if err := p.Start(); err != nil {
 		return err
 	}

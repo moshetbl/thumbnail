@@ -26,6 +26,8 @@ import (
 	"net/http"
 	"os"
 	"io"
+	"image"
+	"image/jpeg"
 )
 
 // service registration function type
@@ -62,12 +64,17 @@ func extractFileNameFromUrl(url string) (string, error) {
 
 // is file type valid/supported
 func isImageFileTypeValid(fileType string) bool {
-	for _, fType := range []string{"jpeg", "jpg", "bmp"} {
+	for _, fType := range []string{"jpeg", "jpg"} {
 		if fileType == fType {
 			return  true
 		}
 	}
 	return false
+}
+
+func registerImageFormats() {
+	image.RegisterFormat("jpeg", "jpeg", jpeg.Decode, jpeg.DecodeConfig)
+	image.RegisterFormat("jpeg", "jpg", jpeg.Decode, jpeg.DecodeConfig)
 }
 
 // download file and save it

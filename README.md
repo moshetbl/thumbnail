@@ -17,6 +17,7 @@ To download project run:
 
     go get github.com/go-yaml/yaml
     go get github.com/moshetbl/go
+    go get -u github.com/disintegration/imaging
 
 Tests
 -------------
