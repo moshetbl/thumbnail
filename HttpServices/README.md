@@ -1,2 +1,0 @@
-# Thumbnail Service Handler
-

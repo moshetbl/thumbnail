@@ -18,10 +18,25 @@ To download project run:
     go get github.com/go-yaml/yaml
     go get github.com/moshetbl/go
     go get -u github.com/disintegration/imaging
+    
+Compile the project:
+
+    cd github.com/moshetbl/go/Application
+    go build -o thumbnail -a main.go
+    
+Run:
+
+    ./thumbnail ../Config/config.yaml
 
 Tests
 -------------
-TBD
+* For now tests are not fully implemented, just a simple example of tests
+
+To run tests:
+
+    cd HttpServices
+    go test
+ 
     
 Deployment:
 -------------

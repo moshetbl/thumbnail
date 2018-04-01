@@ -54,6 +54,10 @@ func errorStringToJson(str string) string{
 func extractFileNameFromUrl(url string) (string, error) {
 	tokens := strings.Split(url, "/")
 	fileName := tokens[len(tokens)-1]
+	if res := strings.ContainsAny(fileName, "."); res == false {
+		return "", errors.New("File name not valid")
+	}
+
 	tokens = strings.Split(fileName, ".")
 	fileType := tokens[len(tokens)-1]
 	if isImageFileTypeValid(fileType) == false {
@@ -65,7 +69,7 @@ func extractFileNameFromUrl(url string) (string, error) {
 // is file type valid/supported
 func isImageFileTypeValid(fileType string) bool {
 	for _, fType := range []string{"jpeg", "jpg"} {
-		if fileType == fType {
+		if strings.ToLower(fileType) == fType {
 			return  true
 		}
 	}

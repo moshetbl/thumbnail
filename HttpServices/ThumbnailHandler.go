@@ -34,13 +34,13 @@ import (
 
 // thumbnail service parameters
 type thumbnailParameters struct {
-	width int
-	height int
-	url string
-	tumbnailTmpPath string
-	fileName string
-	tmpPath string
-	sessionId int
+	width int // width of the new image
+	height int // height of the new image
+	url string // url of the image, used for downloading the image
+	tumbnailTmpPath string // full path of the image
+	fileName string // only the file name
+	tmpPath string // temporary path in which the files are saved
+	sessionId int // current session id
 }
 // registration function
 func registerThumbnail(config *CommonServiceConfig) error {
@@ -198,8 +198,8 @@ func thumbnailUploadFile(params *thumbnailParameters, w http.ResponseWriter) err
 
 // thumbnail service handler
 func thumbnailHandler(w http.ResponseWriter, r *http.Request) {
+	// load client attributes, and internal information
 	params, err :=fillThumbnailParams(r.URL.Query())
-
 	if err != nil {
 		http.Error(w, errorStringToJson(err.Error()), http.StatusMethodNotAllowed)
 		return
@@ -210,6 +210,7 @@ func thumbnailHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, errorStringToJson(err.Error()), http.StatusNotFound)
 		return
 	}
+	defer os.Remove(params.tumbnailTmpPath) // dont forget to delete file at the end of the session
 
 	// resize image
 	if err := thumbnailImageResize(params); err != nil {

@@ -50,7 +50,7 @@ func newManager() error {
 	return nil
 }
 
-// create and init manager
+// create and init manager and run
 func Init(filePath string) error {
 	if err := newManager(); err != nil {
 		return err
@@ -60,11 +60,16 @@ func Init(filePath string) error {
 		return err
 	}
 
+	log.Println("Service Manager is going up!!!")
+	if err := gServiceManager.Start(); err != nil {
+		return err
+	}
+
 	return nil
 }
 
 
-// init and run manager
+// init manager
 func (p *serviceManager) Init(filePath string) error {
 
 	p.fillRegistration()
@@ -78,10 +83,6 @@ func (p *serviceManager) Init(filePath string) error {
 	}
 
 	registerImageFormats() // register supported image formats for services
-
-	if err := p.Start(); err != nil {
-		return err
-	}
 
 	return nil
 }
@@ -116,6 +117,8 @@ func (p *serviceManager) registerServices() error {
 				log.Printf("Service:%s Registration Error %s", serviceKey, err.Error())
 				return err
 			}
+
+			log.Printf("Service:%s was registered", serviceKey)
 		}
 	}
 	return nil
@@ -126,13 +129,13 @@ func (p *serviceManager) loadConfiguration(filePath string) error {
 	// load configuration file
 	b, err := ioutil.ReadFile(filePath) // just pass the file name
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return err
 	}
 
 	// unmarshal yaml, to configuration struct
 	if err = yaml.Unmarshal(b, &p.config); err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return err
 	}
 
