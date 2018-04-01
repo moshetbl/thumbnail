@@ -18,7 +18,6 @@ package HttpServices
 
 import (
 	"net/http"
-	"fmt"
 	"net/url"
 	"log"
 	"errors"
@@ -26,6 +25,8 @@ import (
 	"image"
 	"github.com/disintegration/imaging"
 	"image/color"
+	"os"
+	"io"
 )
 
 // implements thumnail service handler
@@ -37,6 +38,7 @@ type thumbnailParameters struct {
 	height int
 	url string
 	tumbnailTmpPath string
+	fileName string
 	tmpPath string
 	sessionId int
 }
@@ -100,6 +102,7 @@ func fillThumbnailParams(values url.Values) (*thumbnailParameters, error){
 	}
 
 	params.tumbnailTmpPath = params.tmpPath + "/" + strconv.Itoa(params.sessionId) + fileName
+	params.fileName = fileName
 
 	return &params, nil
 }
@@ -120,7 +123,7 @@ func thumbnailImageResize(params *thumbnailParameters) error{
 	dstRatio := float64(params.width) / float64(params.height)
 	var dstWidth, dstHeight int
 
-	// in case aspect ratio is the same
+	// in case aspect ratio is the same (rounded values)
 	if int(origRatio * 3.0) == int(dstRatio * 3.0) {
 		if origWidth < params.width {
 			dstHeight = origHeight
@@ -159,6 +162,40 @@ func thumbnailImageResize(params *thumbnailParameters) error{
 	return nil
 }
 
+// upload resized file as a response
+func thumbnailUploadFile(params *thumbnailParameters, w http.ResponseWriter) error {
+
+	fp, err := os.Open(params.tumbnailTmpPath)
+	defer fp.Close() //Close after function return
+	if err != nil {
+		return errors.New("File Not Found")
+	}
+
+	// fill header
+
+	//detect Content-Type of the file
+	fileHeader := make([]byte, 512)
+	fp.Read(fileHeader)
+	fileContentType := http.DetectContentType(fileHeader)
+
+	//get the file size
+	fileStat, _ := fp.Stat()                     //Get info from file
+	fileSize := strconv.FormatInt(fileStat.Size(), 10) //Get file size as a string
+
+	//send the headers
+	w.Header().Set("Content-Disposition", "attachment; filename=" + params.fileName)
+	w.Header().Set("Content-Type", fileContentType)
+	w.Header().Set("Content-Length", fileSize)
+
+	//send the file
+	fp.Seek(0, 0) // return to the begining of the file
+	if _, err := io.Copy(w, fp); err != nil{ //'Copy' the file to the client
+		return errors.New("File Copy Error")
+	}
+
+	return nil
+}
+
 // thumbnail service handler
 func thumbnailHandler(w http.ResponseWriter, r *http.Request) {
 	params, err :=fillThumbnailParams(r.URL.Query())
@@ -180,7 +217,8 @@ func thumbnailHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TBD upload image to browser
-
-	fmt.Fprintf(w, "TEST OK")
+	// upload image to browser
+	if err := thumbnailUploadFile(params, w); err != nil {
+		http.Error(w, errorStringToJson(err.Error()), http.StatusInternalServerError)
+	}
 }

@@ -3,11 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f6c333db-f7fa-49b2-8e67-5b4d05513619" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Config/config.yaml" afterPath="$PROJECT_DIR$/Config/config.yaml" />
-      <change beforePath="$PROJECT_DIR$/HttpServices/Common.go" afterPath="$PROJECT_DIR$/HttpServices/Common.go" />
-      <change beforePath="$PROJECT_DIR$/HttpServices/ServiceManager.go" afterPath="$PROJECT_DIR$/HttpServices/ServiceManager.go" />
       <change beforePath="$PROJECT_DIR$/HttpServices/ThumbnailHandler.go" afterPath="$PROJECT_DIR$/HttpServices/ThumbnailHandler.go" />
-      <change beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,11 +17,31 @@
       <file leaf-file-name="ThumbnailHandler.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/HttpServices/ThumbnailHandler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="163">
-              <caret line="162" column="24" lean-forward="true" selection-start-line="162" selection-start-column="24" selection-end-line="162" selection-end-column="43" />
+            <state relative-caret-position="-962">
+              <caret line="125" column="56" lean-forward="false" selection-start-line="125" selection-start-column="56" selection-end-line="125" selection-end-column="56" />
               <folding>
-                <element signature="e#577#706#0" expanded="true" />
+                <element signature="e#577#711#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="server.go" pinned="false" current-in-tab="false">
+        <entry file="file:///usr/local/go/src/net/http/server.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-58">
+              <caret line="90" column="5" lean-forward="false" selection-start-line="90" selection-start-column="5" selection-end-line="90" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="status.go" pinned="false" current-in-tab="false">
+        <entry file="file:///usr/local/go/src/net/http/status.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="62" column="29" lean-forward="false" selection-start-line="62" selection-start-column="4" selection-end-line="62" selection-end-column="29" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -56,8 +72,10 @@
       <find>HttpServices</find>
       <find>errorStringToJson</find>
       <find>gServiceManager</find>
-      <find>file</find>
       <find>uri</find>
+      <find>file</find>
+      <find>fileSize</find>
+      <find>tumbnailTmpPath</find>
     </findStrings>
   </component>
   <component name="GOROOT" path="/usr/local/go" />
@@ -251,7 +269,8 @@
     <MESSAGE value="1. Service Configuration file&#10;2. Basic http service&#10;&#10;TBD:&#10;1. load image from URL&#10;2. rezise image&#10;3. return resized image" />
     <MESSAGE value="minor" />
     <MESSAGE value="support for downloading files.&#10;design changes." />
-    <option name="LAST_COMMIT_MESSAGE" value="support for downloading files.&#10;design changes." />
+    <MESSAGE value="image resizing (tested)" />
+    <option name="LAST_COMMIT_MESSAGE" value="image resizing (tested)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -447,14 +466,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/local/go/src/net/http/server.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="2312" column="5" lean-forward="false" selection-start-line="2312" selection-start-column="5" selection-end-line="2312" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/go/src/net/url/url.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="202">
@@ -486,14 +497,6 @@
           <folding>
             <element signature="e#569#641#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/go/src/net/http/status.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="128" column="29" lean-forward="false" selection-start-line="128" selection-start-column="4" selection-end-line="128" selection-end-column="29" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -574,12 +577,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///usr/local/go/src/net/http/status.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="62" column="29" lean-forward="false" selection-start-line="62" selection-start-column="4" selection-end-line="62" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/go/src/net/http/server.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-58">
+          <caret line="90" column="5" lean-forward="false" selection-start-line="90" selection-start-column="5" selection-end-line="90" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/HttpServices/ThumbnailHandler.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="163">
-          <caret line="162" column="24" lean-forward="true" selection-start-line="162" selection-start-column="24" selection-end-line="162" selection-end-column="43" />
+        <state relative-caret-position="-962">
+          <caret line="125" column="56" lean-forward="false" selection-start-line="125" selection-start-column="56" selection-end-line="125" selection-end-column="56" />
           <folding>
-            <element signature="e#577#706#0" expanded="true" />
+            <element signature="e#577#711#0" expanded="true" />
           </folding>
         </state>
       </provider>
