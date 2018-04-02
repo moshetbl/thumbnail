@@ -24,6 +24,7 @@ import (
 	"io/ioutil"
 	"github.com/go-yaml/yaml"
 	"net/http"
+	"os"
 )
 
 // global pointer to service manager
@@ -89,7 +90,15 @@ func (p *serviceManager) Init(filePath string) error {
 
 // start services
 func (p *serviceManager) Start() error {
-	return http.ListenAndServe(":" + p.config.Port, nil)
+	port := os.Getenv("PORT")
+	
+	if port == "" {
+		log.Fatal("$PORT not set")
+        }
+	
+	log.Printf("**** Listen on Port:%s *****\n", port)
+	
+	return http.ListenAndServe(":" + port, nil)
 }
 
 func (p *serviceManager) getSessionId() int {
