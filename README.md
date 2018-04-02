@@ -52,6 +52,7 @@ Install heroku and glide packages:
     sudo apt-get install glide
     
 Deploy:
+
     cd $GOPATH/github.com/moshetbl/thumbnail
     heroku create -b https://github.com/heroku/heroku-buildpack-go.git
     glide create
