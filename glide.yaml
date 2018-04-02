@@ -1,0 +1,9 @@
+package: github.com/moshetbl/thumbnail
+import:
+- package: github.com/disintegration/imaging
+  version: ^1.4.1
+- package: github.com/go-yaml/yaml
+  version: ^2.2.1
+- package: github.com/moshetbl/go
+  subpackages:
+  - HttpServices

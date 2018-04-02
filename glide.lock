@@ -1,0 +1,18 @@
+hash: 25d6b0a578b95bc7b83a0e72fb54a80f577f07d660df09a188acb6458edca596
+updated: 2018-04-02T13:27:26.113637348+03:00
+imports:
+- name: github.com/disintegration/imaging
+  version: fd34ef7671b12cdf1b024d98c6b327b2770d32c4
+- name: github.com/go-yaml/yaml
+  version: 5420a8b6744d3b0345ab293f6fcba19c978f1183
+- name: github.com/moshetbl/go
+  version: c6684ea28ed3b404b476a8b825983db4a0a08622
+  subpackages:
+  - HttpServices
+- name: golang.org/x/image
+  version: f3a9b89b59def9194717c1d0bd4c0d08fa1afa7b
+  subpackages:
+  - bmp
+  - tiff
+  - tiff/lzw
+testImports: []
