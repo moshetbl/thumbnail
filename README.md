@@ -39,7 +39,28 @@ To run tests:
     
 Deployment:
 -------------
-TBD
+Heroku Deployment Procecdure:
+
+Install heroku and glide packages:
+
+    sudo add-apt-repository "deb https://cli-assets.heroku.com/branches/stable/apt ./"
+    curl -L https://cli-assets.heroku.com/apt/release.key | sudo apt-key add -
+    sudo apt-get update
+    sudo apt-get install heroku
+    sudo add-apt-repository ppa:masterminds/glide
+    sudo apt-get update
+    sudo apt-get install glide
+    
+Deploy:
+    cd $GOPATH/github.com/moshetbl/thumbnail
+    heroku create -b https://github.com/heroku/heroku-buildpack-go.git
+    glide create
+    glide install
+    echo "web: thumbnail Config/config.yaml" > Procfile
+    git add glide.yaml glide.lock Procfile
+    git commit -m "glide Procfile"
+    git push heroku master
+    heroku open
 
 License
 -------------
