@@ -21,7 +21,6 @@ To download project run:
     
 Compile the project:
 
-    cd github.com/moshetbl/go/Application
     go build -o thumbnail -a main.go
     
 Run:
