@@ -25,7 +25,12 @@ Compile the project:
     
 Run:
 
+    export PORT="1234"
     ./thumbnail ../Config/config.yaml
+    
+Browser Example:
+
+    localhost:1234/thumbnail?url=http://images.pexels.com/photos/60597/dahlia-red-blossom-bloom-60597.jpeg&width=300&height=200
 
 Tests
 -------------
