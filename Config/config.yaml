@@ -1,5 +1,5 @@
-port: "8080"
-tmppath: "/tmp"
+port: "80"
+tmppath: "."
 services:
   thumbnail:
     path: "/thumbnail"

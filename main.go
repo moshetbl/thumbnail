@@ -20,7 +20,7 @@ import (
 	"log"
 	"os"
 	"errors"
-	"github.com/moshetbl/go/HttpServices"
+	"github.com/moshetbl/thumbnail/HttpServices"
 )
 
 func getConfigFile() (string, error) {
